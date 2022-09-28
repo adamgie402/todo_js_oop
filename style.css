@@ -78,14 +78,14 @@ section {
     margin-left: 12px;
 }
 
-.delBtn {
+.btnDelete {
     color: white;
     background-color: red;
     border: 0;
     padding: 7px;
 }
 
-.doneBtn {
+.btnDone {
     color: white;
     background-color: green;
     border: none;

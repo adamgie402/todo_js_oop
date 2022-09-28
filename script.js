@@ -35,8 +35,8 @@ class Task {
         li.appendChild(span);
         span.textContent = this.name;
         // li.setAttribute('draggable','true');
-        span.setAttribute('onclick', 'changeStatus(this.id)');
-        span.setAttribute('id', this.id);
+        // span.setAttribute('onclick', 'changeStatus(this.id)');
+        // span.setAttribute('id', this.id);
         if(this.isDone === true) {
         span.setAttribute('class','taskDone');
         }
@@ -45,13 +45,13 @@ class Task {
         // button Del
         btn.setAttribute("onclick", "deleteTask(this)");
         btn.textContent = "Del.";
-        btn.classList.add("delBtn");
+        btn.classList.add("btnDelete");
         li.appendChild(btn);
         // button Done
         btn = document.createElement('button');
         btn.setAttribute("onclick", "changeStatus(this)");
         btn.textContent = "Done";
-        btn.classList.add("doneBtn");
+        btn.classList.add("btnDone");
         li.appendChild(btn);
         return li;
     }
@@ -66,17 +66,23 @@ taskList.push(new Task(4,'back to js',100,false));
 
 // ************************ functions
 
-function refreshOutput() {
-    todoList.textContent = "";
-    showTasks();
-}
-
 function showTasks() {
     console.log('f show task...');
     taskList.forEach(value => {
         console.log(value);
         todoList.appendChild(value.createLi());
     });
+}
+
+function getIndexOfName(TaskName) {
+    for(i=0; i<taskList.length; i++) {
+        if (taskList[i].name == TaskName) { return i; }
+    }
+}
+
+function refreshOutput() {
+    todoList.textContent = "";
+    showTasks();
 }
 
 function addTask(e) {
@@ -117,6 +123,26 @@ function addTask(e) {
     }        
 }
 
+function deleteTask(el) {
+    console.log('f delete task...');
+    let elem = el.parentElement.childNodes[0].textContent;
+    console.log(elem);
+    // get array index of elem
+    let elemIndex = getIndexOfName(elem);
+    console.log(elemIndex);
+    // remove elem from array
+    taskList.splice(elemIndex, 1);
+    // remove elem from html output
+    el.parentElement.remove();
+}
+
+function sortByStatus() {
+    console.log('f sort by status...');
+    taskList.sort(function(a,b){return a.isDone - b.isDone});
+    console.log(taskList);
+    refreshOutput();
+}
+
 function changeStatus(e) {
     console.log('f change status...');
     // change html outpu class
@@ -134,24 +160,8 @@ function changeStatus(e) {
             return; // stop iteration here
         }
     }
-    
-
 }
 
-function deleteTask() {
-    console.log('f delete task...');
-}
-
-function sortByStatus() {
-    console.log('f sort by status...');
-    taskList.sort(function(a,b){return a.isDone - b.isDone});
-    console.log(taskList);
-    refreshOutput();
-}
-
-
-
-console.log('lol');
 
 
 // ************************ notest (do not delete)
