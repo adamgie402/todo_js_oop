@@ -12,10 +12,12 @@ let taskList = [];
 
 document.getElementById("inputTodo").focus();
 
-// ************************ EVENTS
+// ************************ events
 
-document.addEventListener('DOMContentLoaded', showTasks);
 btnEnter.addEventListener('click', addTask);
+document.addEventListener('DOMContentLoaded', showTasks);
+
+// ************************ classes / object constructors
 
 // obiect class (constructor); ES6
 class Task {
@@ -28,7 +30,6 @@ class Task {
     }
     // metody - methods
     createLi() {
-        // console.log('f create li...');
         let li = document.createElement('li');
         let span = document.createElement('span');
         li.appendChild(span);
@@ -39,6 +40,19 @@ class Task {
         if(this.isDone === true) {
         span.setAttribute('class','taskDone');
         }
+        //li buttons
+        let btn = document.createElement('button');
+        // button Del
+        btn.setAttribute("onclick", "deleteTask(this)");
+        btn.textContent = "Del.";
+        btn.classList.add("delBtn");
+        li.appendChild(btn);
+        // button Done
+        btn = document.createElement('button');
+        btn.setAttribute("onclick", "changeStatus(this)");
+        btn.textContent = "Done";
+        btn.classList.add("doneBtn");
+        li.appendChild(btn);
         return li;
     }
 }
@@ -50,15 +64,11 @@ taskList[2] = new Task(3,'go outside',3,false);
 // adding new task to taskList using push or unshift
 taskList.push(new Task(4,'back to js',100,false));
 
+// ************************ functions
 
-// list sorting samples (don't delete)
-// sorting by order property value:
-// console.log(taskList.sort(function(a,b){return a.order - b.order}));
-// reverse sorting:
-// console.log(taskList.reverse());
-
-function clearOutput() {
-    listUl.textContent = "";
+function refreshOutput() {
+    todoList.textContent = "";
+    showTasks();
 }
 
 function showTasks() {
@@ -76,7 +86,7 @@ function addTask(e) {
     let inputVal = input.value;
     inputVal = inputVal.toString();
     inputVal = inputVal.trim();
-    // if input value is empty
+    // if input is empty
     if (inputVal == ""){
         input.value = "";
         input.setAttribute('placeholder', 'type something...');
@@ -86,7 +96,6 @@ function addTask(e) {
     let isExist = (function() {
         // iteration by taskList obiects property values - get true or false 
         for(i=0; i<taskList.length; i++) {
-            
             if(Object.values(taskList[i]).includes(inputVal)) {
                 // if value exist in some taskList obiect
                 return true;
@@ -108,3 +117,47 @@ function addTask(e) {
     }        
 }
 
+function changeStatus(e) {
+    console.log('f change status...');
+    // change html outpu class
+    let elem = e.parentElement.firstChild;
+    elem.classList.toggle('taskDone');
+    // iterate by taskList and find object with the same name-property and change his isDone status
+    elem = elem.textContent;
+    for(i=0; i<taskList.length; i++) {
+        if (taskList[i].name == elem && taskList[i].isDone == true) {
+            taskList[i].isDone = false;
+            return; // stop iteration here
+        }
+        if (taskList[i].name == elem && taskList[i].isDone == false) {
+            taskList[i].isDone = true;
+            return; // stop iteration here
+        }
+    }
+    
+
+}
+
+function deleteTask() {
+    console.log('f delete task...');
+}
+
+function sortByStatus() {
+    console.log('f sort by status...');
+    taskList.sort(function(a,b){return a.isDone - b.isDone});
+    console.log(taskList);
+    refreshOutput();
+}
+
+
+
+console.log('lol');
+
+
+// ************************ notest (do not delete)
+
+// list sorting
+// sorting by order property value:
+// console.log(taskList.sort(function(a,b){return a.isDone - b.isDone}));
+// reverse sorting:
+// console.log(taskList.reverse());
