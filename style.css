@@ -1,0 +1,111 @@
+
+body {
+    background-color: #ACE1AF;
+    /* background-color: #D0F0C0; */
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 17px;
+}
+
+:focus {
+    /* outline: none; */
+    outline-color: yellowgreen;
+    outline-style: solid;
+    outline-offset: 3px;
+    outline-width: 3px;;
+  }
+  
+h1, h2, h3 {
+    font-weight: 100;
+}
+h1::after {
+    margin: 7px 0 40px 0;
+    display: block;
+    content: "";
+    border-top: 1px solid green;
+}
+
+section {
+    max-width: 500px;
+    margin: 0 auto;
+}
+#todo form {
+    display: flex;
+
+}
+#todo form input {
+    flex-grow: 2;
+    font-size: 1em;
+    padding: 10px;
+    border: 0px solid black;
+}
+
+#todo form input:focus {
+    border: 0px solid black;
+
+}
+
+#todoList {
+    padding-left: 0;
+}
+#todoList li {
+    list-style-type: none;
+    padding: 10px;
+    margin-bottom: 7px;
+    background-color: rgb(203, 241, 222);
+    display: flex;
+    /* border-bottom: 1px solid black; */
+}
+#todoList li span {
+    flex-grow: 1;
+    padding-top: 6px;
+}
+#todoList li>button {
+    display: block;
+    margin-left: 12px;
+    align-self: flex-end;
+    justify-self: flex-end;
+    text-decoration: none;
+    flex-grow: 0
+}
+
+.btnEnter {
+    color: white;
+    background-color: goldenrod;
+    background-color: green;
+    border: 0px solid black;
+    border: none;
+    padding: 7px 15px;
+    margin-left: 12px;
+}
+
+.delBtn {
+    color: white;
+    background-color: red;
+    border: 0;
+    padding: 7px;
+}
+
+.doneBtn {
+    color: white;
+    background-color: green;
+    border: none;
+    padding: 7px;
+}
+.taskDone {
+    color: rgb(110, 182, 110);
+    text-decoration: line-through;
+}
+
+#operationBtns {
+    margin-top: 40px;
+    display: flex;
+    justify-content: space-between;
+    border-top: 1px solid green;
+    padding-top: 12px;    
+}
+
+#footer {
+    text-align: left;
+    margin-top: 40px;;
+    font-size: 0.7em;
+}

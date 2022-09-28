@@ -4,9 +4,36 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quick TODO app</title>
+    <meta name="author" content="AdamGie402">
+    <meta name="description" content="'Quick TO-DO' application to make quick to-dos. App using vanilla JavaScript, OOP and local storage.">
+    <meta name="keywords" content="app, todo app, to-do, list, guick, notes, html, css, js, OOP, vanilla javascript, vanilla js">
+    <link rel="stylesheet" href="style.css?ver=0">
+    <script src="script.js?ver=0" defer></script>
+    <title>Quick TO-DO app</title>
+    <!-- web browser cache  -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
 </head>
 <body>
-    
+    <body>
+        <section id="todo">
+            <h1>Quick To-Do List</h1>
+            <form>
+                <input id="inputTodo" type="text" placeholder="type something...">
+                <button id="btnEnter" class="btnEnter">Enter</button>
+            </form>
+            <ul id="todoList"></ul>
+        </section>
+        <section id="operationBtns">
+            <!-- <button id="delAllBtn" class="delBtn">Delete all</button> -->
+            <!-- <button id="delDoneBtn" class="doneBtn">Delete done</button> -->
+        </section>
+        <section id="footer">
+            <p>'Quick TO-DO' application to make quick to-dos. App using vanilla JavaScript and local storage. All user data is stored localy (in user device) and stay private. The tasks will be lost after erase browser history.</p>
+            <p>ver.: 0</p>
+        </section>
+    </body>
+    </html>
 </body>
 </html>
