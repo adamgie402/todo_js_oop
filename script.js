@@ -1,6 +1,4 @@
 
-console.log('test');
-
 // ************************ global variables
 
 const input = document.getElementById('inputTodo');
@@ -15,15 +13,14 @@ document.getElementById("inputTodo").focus();
 // ************************ events
 
 btnEnter.addEventListener('click', addTask);
-document.addEventListener('DOMContentLoaded', showTasks);
+document.addEventListener('DOMContentLoaded', getLocalstorage);
 
 // ************************ classes / object constructors
 
 // obiect class (constructor); ES6
 class Task {
-    constructor(id, name, order, isDone) {
+    constructor(name, order, isDone) {
         // właściwości - properties
-        this.id = id;
         this.name = name;
         this.order = order;
         this.isDone = isDone;
@@ -57,12 +54,7 @@ class Task {
     }
 }
 
-// default sample elements
-taskList[0] = new Task(1,'learn js',2,true);
-taskList[1] = new Task(2,'eat something',1,false);
-taskList[2] = new Task(3,'go outside',3,false);
-// adding new task to taskList using push or unshift
-taskList.push(new Task(4,'back to js',100,false));
+
 
 // ************************ functions
 
@@ -74,16 +66,10 @@ function showTasks() {
     });
 }
 
-function getIndexOfName(TaskName) {
-    for(i=0; i<taskList.length; i++) {
-        if (taskList[i].name == TaskName) { return i; }
-    }
-}
-
-function refreshOutput() {
-    todoList.textContent = "";
-    showTasks();
-}
+// function refreshOutput() {
+//     todoList.textContent = "";
+//     showTasks();
+// }
 
 function addTask(e) {
     e.preventDefault();
@@ -96,6 +82,7 @@ function addTask(e) {
     if (inputVal == ""){
         input.value = "";
         input.setAttribute('placeholder', 'type something...');
+        console.log('empty input... nothing to do...');
         return; //stop the function
     }
     // check if task alredy exist on list
@@ -113,13 +100,18 @@ function addTask(e) {
     if(isExist) {
         // if exist
         input.value = "";
-        input.setAttribute('placeholder', "it's already on list ;)");       
+        input.setAttribute('placeholder', "it's already on list ;)");
+        console.log('alredy on list... nothing to do...');       
     } else {
         // if not exist - add new task object to task list, to first position
-        taskList.unshift(new Task(0,inputVal,0,false));
+        taskList.unshift(new Task(inputVal,0,false));
         console.log(taskList);
         // add new task to html output on first place
         todoList.insertBefore(taskList[0].createLi(), todoList.childNodes[0]); //insertBefore(newElem, beforeThisElem)
+        // clear input
+        input.value = "";
+        // actualise local storage
+        setLocalStorage()
     }        
 }
 
@@ -134,6 +126,14 @@ function deleteTask(el) {
     taskList.splice(elemIndex, 1);
     // remove elem from html output
     el.parentElement.remove();
+    // actualise local storage
+    setLocalStorage()
+}
+
+function getIndexOfName(TaskName) {
+    for(i=0; i<taskList.length; i++) {
+        if (taskList[i].name == TaskName) { return i; }
+    }
 }
 
 function sortByStatus() {
@@ -153,15 +153,50 @@ function changeStatus(e) {
     for(i=0; i<taskList.length; i++) {
         if (taskList[i].name == elem && taskList[i].isDone == true) {
             taskList[i].isDone = false;
+            setLocalStorage();
             return; // stop iteration here
         }
         if (taskList[i].name == elem && taskList[i].isDone == false) {
             taskList[i].isDone = true;
+            setLocalStorage();
             return; // stop iteration here
         }
     }
 }
 
+function setLocalStorage(){
+    console.log("f setLocalStorage...");
+    localStorage.setItem('tasks', JSON.stringify(taskList));
+    console.log('local strage JSON: ');
+    console.log(JSON.parse(localStorage.getItem('tasks')));
+}
+
+function getLocalstorage(){
+    console.log('f getLocalstorage...');
+    if(localStorage.getItem('tasks') === null){
+        console.log("local storage are empty...");
+        loadDefaultTasks();
+    } else {
+        // get tasks from local storage 
+        let tasks = JSON.parse(localStorage.getItem('tasks'));
+        // iterate and push every row to taskList array using Task object constructor
+        tasks.forEach(element => {
+            console.log(element.name + ' (' + element.isDone + ')');
+            taskList.push(new Task(element.name, element.order, element.isDone));
+        });
+        showTasks();
+    }
+}
+
+function loadDefaultTasks() {
+    console.log("f loadDefaultTasks...");
+    // default sample elements
+    taskList[0] = new Task('eat something',1,false);
+    taskList[1] = new Task('learn JS',2,false);
+    // adding new task to taskList using push or unshift
+    taskList.push(new Task('go outside',3,false));
+    showTasks();
+} 
 
 
 // ************************ notest (do not delete)
