@@ -72,46 +72,51 @@ function showTasks() {
 // }
 
 function addTask(e) {
+    // let isExist;
     e.preventDefault();
     console.log('f add task...');   
     // input validation
     let inputVal = input.value;
-    inputVal = inputVal.toString();
-    inputVal = inputVal.trim();
+    inputVal = inputVal.toString().trim();
+    // inputVal = inputVal.trim();
+    
     // if input is empty
     if (inputVal == ""){
         input.value = "";
-        input.setAttribute('placeholder', 'type something...');
-        console.log('empty input... nothing to do...');
+        input.setAttribute('placeholder', 'add some task...');
+        console.log('empty input - nothing to do...');
         return; //stop the function
     }
+    
     // check if task alredy exist on list
     let isExist = (function() {
         // iteration by taskList obiects property values - get true or false 
         for(i=0; i<taskList.length; i++) {
-            if(Object.values(taskList[i]).includes(inputVal)) {
+            // if(Object.values(taskList[i]).includes(inputVal)) {
+            if (taskList[i].name === inputVal) {
                 // if value exist in some taskList obiect
+                console.log(true);
                 return true;
-            } else {
-                return false;
-            }
+            } 
         }
     }());
-    if(isExist) {
+    if(isExist === true) {
         // if exist
         input.value = "";
         input.setAttribute('placeholder', "it's already on list ;)");
-        console.log('alredy on list... nothing to do...');       
+        console.log('alredy on list - nothing to do...');       
     } else {
         // if not exist - add new task object to task list, to first position
+        console.log('adding new task...');
         taskList.unshift(new Task(inputVal,0,false));
-        console.log(taskList);
         // add new task to html output on first place
         todoList.insertBefore(taskList[0].createLi(), todoList.childNodes[0]); //insertBefore(newElem, beforeThisElem)
         // clear input
         input.value = "";
+        input.setAttribute('placeholder', "add some task...");
         // actualise local storage
         setLocalStorage()
+        console.log(taskList);
     }        
 }
 
@@ -199,7 +204,7 @@ function loadDefaultTasks() {
 } 
 
 
-// ************************ notest (do not delete)
+// ************************ notes (do not delete)
 
 // list sorting
 // sorting by order property value:
