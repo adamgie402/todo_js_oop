@@ -3,9 +3,10 @@
 
 const input = document.getElementById('inputTodo');
 const btnEnter = document.getElementById('btnEnter');
+const btnDelDone = document.getElementById('btnDelDone');
+const btnDelAll = document.getElementById('btnDelAll');
 const todoList = document.getElementById('todoList');
   
-let idCounter;
 let taskList = [];
 
 document.getElementById("inputTodo").focus();
@@ -13,6 +14,8 @@ document.getElementById("inputTodo").focus();
 // ************************ events
 
 btnEnter.addEventListener('click', addTask);
+btnDelDone.addEventListener('click', deleteDoneTasks);
+btnDelAll.addEventListener('click', deleteAllTasks);
 document.addEventListener('DOMContentLoaded', getLocalstorage);
 
 // ************************ classes / object constructors
@@ -52,34 +55,52 @@ class Task {
         li.appendChild(btn);
         return li;
     }
+
 }
-
-
 
 // ************************ functions
 
+
+function deleteDoneTasks() {
+    console.log('f m deleteDoneTasks');
+    // itterate array backwards throug the array (array are changing and is shorter on every delete cycle/iteraton
+    for (var i = taskList.length - 1; i >= 0; --i) {
+        if (taskList[i].isDone == true) {
+            // delete from array
+            console.log('deleting: ' + taskList[i].name);
+            taskList.splice(i,1);
+        }
+    }
+    console.log('after delete: ');
+    console.log(taskList);
+    setLocalStorage();
+    todoList.textContent = "";
+    showTasks();
+    }
+
+function deleteAllTasks() {
+    taskList = [];
+    setLocalStorage();
+    console.log('all tasks deleted...');
+    todoList.textContent = "";
+    showTasks();
+
+}
+
 function showTasks() {
     console.log('f show task...');
+    todoList.textContent = "";
     taskList.forEach(value => {
-        console.log(value);
         todoList.appendChild(value.createLi());
     });
 }
 
-// function refreshOutput() {
-//     todoList.textContent = "";
-//     showTasks();
-// }
-
 function addTask(e) {
-    // let isExist;
     e.preventDefault();
     console.log('f add task...');   
     // input validation
     let inputVal = input.value;
     inputVal = inputVal.toString().trim();
-    // inputVal = inputVal.trim();
-    
     // if input is empty
     if (inputVal == ""){
         input.value = "";
@@ -87,14 +108,11 @@ function addTask(e) {
         console.log('empty input - nothing to do...');
         return; //stop the function
     }
-    
     // check if task alredy exist on list
     let isExist = (function() {
         // iteration by taskList obiects property values - get true or false 
         for(i=0; i<taskList.length; i++) {
-            // if(Object.values(taskList[i]).includes(inputVal)) {
             if (taskList[i].name === inputVal) {
-                // if value exist in some taskList obiect
                 console.log(true);
                 return true;
             } 
@@ -106,8 +124,9 @@ function addTask(e) {
         input.setAttribute('placeholder', "it's already on list ;)");
         console.log('alredy on list - nothing to do...');       
     } else {
-        // if not exist - add new task object to task list, to first position
         console.log('adding new task...');
+        // if not exist - add new task: 
+        // add new task to task array (to first position)
         taskList.unshift(new Task(inputVal,0,false));
         // add new task to html output on first place
         todoList.insertBefore(taskList[0].createLi(), todoList.childNodes[0]); //insertBefore(newElem, beforeThisElem)
@@ -115,7 +134,7 @@ function addTask(e) {
         input.value = "";
         input.setAttribute('placeholder', "add some task...");
         // actualise local storage
-        setLocalStorage()
+        setLocalStorage();
         console.log(taskList);
     }        
 }
@@ -132,7 +151,7 @@ function deleteTask(el) {
     // remove elem from html output
     el.parentElement.remove();
     // actualise local storage
-    setLocalStorage()
+    setLocalStorage();
 }
 
 function getIndexOfName(TaskName) {
